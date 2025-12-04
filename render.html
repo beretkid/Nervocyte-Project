@@ -46,7 +46,7 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setAnimationLoop( animate );
+
 renderer.domElement.id = "wawa"
 document.body.appendChild( renderer.domElement );
 var light = new THREE.AmbientLight( 0x404040 ); // soft white light
@@ -87,10 +87,10 @@ loader.load(
 //const geometry = new THREE.BoxGeometry( 2, 1, 1 );
 //const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 function init() {
-
+renderer.setAnimationLoop( animate );
 cube.position.y = 5
 camera.position.z = 0;
-
+}
 
 
 
@@ -233,7 +233,7 @@ var prevy = 0
 
 ctx.fillStyle = "red"
 ctx.fillRect(0,0,50,50)
-}
+
 
 
 
