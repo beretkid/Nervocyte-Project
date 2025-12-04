@@ -1,0 +1,267 @@
+
+
+<div id="LogBar"style="position:absolute;top:0%;left:0%;border:2px solid;border-color:#0f0f0f;width:50%;height:100%">
+</div>
+<input type="text" id="input" value=""style="position:absolute;top:50%;left:50%;">
+<body>
+<iframe style="position:absolute;top:0%;left:50%;border:2px solid; z-index:10;border-color:#0f0f0f;width:50%;height:50%;" src="index.html" id="iframe"></iframe>
+</body>
+
+
+
+<script>
+zoom=0
+
+//mood 0 = neutral +=happier -=sadder
+hour = 0
+minute = 0
+w = window.innerWidth
+h = window.innerHeight
+day = 0
+player = {name:"The host",mood:0,injuries:[],hunger:100,thirst:100,stamina:100,tiredness:0,traits:[],skills:{perception:1,swiftness:1,building:1,gardening:1,sanity:100,control:100},r:0,opin:5,cr:0,x:0,y:0,w:10,h:10}
+var rooms = []
+entities = [player,{name:"Huge_wall",cr:1,desc:"A massive, dark-ish metal wall, it seems to be curved. you wonder where the gate to sutch a massive peice of arcitecture would be.",x:-500,y:0,w:1000000,h:10}]
+rooms = [{name:"Field",desc:"A large open field, devoid of grass, the place looks pretty desaturated.",contents:[entities[0]],north:1,south:null,hostThoughts:"Not.. entirely sure what happend here or what that liquid is of but im sure its normal, i see puddles of mystery juice all the time"},{name:"Gate",desc:"A field stands in contrast to a massive wall, you havent seen anything like it before",hostThoughts:"if there was one wish i could make it would be to destroy the citadel and their stupid wall",south:0,contents:[entities[1]]}]
+opinmsg=["I gotta get this out of here no matter what","Get out of my head, get OUT","Im getting rid of you the next chance i get","i prefer to not have a parasite in me","im not sure if your in here to help or not","your alright i suppose."]
+
+const pressedKeys = {};
+
+pb = document.getElementById("ptop")
+message = document.getElementById("LogBar")
+input = document.getElementById("input")
+function getRoom(dir,ent) {
+if (dir="north") {
+return rooms[ent.cr].north
+}
+
+if (dir="south") {
+return rooms[ent.cr].south
+}
+}
+function random(min,max) {
+    return min + Math.floor(Math.random() * (max-min))
+}
+  function aRGB(a,b,c) {
+  
+return "rgb(" + a + "," + b + "," + c + ")"
+  }
+  function countOccurrences(dividend, divisor) {
+  if (divisor === 0) {
+    throw new Error("Divisor cannot be zero.");
+  }
+  return Math.floor(dividend / divisor);
+}
+function generateMap(seed,seed2,seed3) {
+sd = String(seed).split("") + String(seed2).split("") + String(seed3).split("")
+
+lv = 0
+slv = 0
+amnt = 0
+
+//ctx.fillStyle = "green"
+
+//ctx.fillRect(0,0,w,h)
+
+for ( i in sd) {
+
+amnt = amnt + 5
+
+
+
+
+
+ctx.fillRect(amnt%w,countOccurrences(amnt,w),5,5)
+//ctx.fillRect(bpx,bpy,sv5*5,sv5*5)
+
+
+}
+
+}
+//generateMap(random(10000000000000000,99999999999999999)*1000,random(10000000000000000,99999999999999999)*1000,random(10000000000000000,99999999999999999)*1000)
+           function output(msg) {
+                    var now = new Date();
+                    var h = now.getHours();
+                    var m = addZero(now.getMinutes());
+                    var s = addZero(now.getSeconds());
+
+                    if (h > 12)
+                        h -= 12;
+                    else if (h === 0)
+                        h = 12;
+
+                    function addZero(t) {
+                        if (t < 10)
+                            t = "0" + t;
+                        return t;
+                    };
+
+                    message.innerHTML = message.innerHTML + String("<div>" +msg + "</div>")
+                }
+					            function clear(msg) {
+                   
+
+                    message.innerHTML = ""
+                }
+
+            // Perform your desired action here, e.g., submit a form, send a message
+
+	     document.addEventListener('keydown', function(event) {
+		  pressedKeys[event.code] = true;
+		  console.log(event.keyCode);
+        if (event.key === 'Enter') {
+            handleCommand(input.value)
+				
+				}
+				})
+				 document.addEventListener('keyup', function(event) {
+		  pressedKeys[event.code] = false;
+
+				})
+
+function handleCommand(rawarg) {
+
+valid=false
+tv = false
+args = rawarg.toLowerCase().split(" ")
+arg = String(args[0])
+arg2 = String(args[1])
+arg3 = String(args[2])
+input.value = ""
+console.log(arg2)
+output(rawarg)
+if (arg=="") {
+
+}
+if (arg=="wait") {
+output("You wait")
+valid=true
+
+}
+console.log(rooms[player.cr])
+for (i in (rooms[player.cr].contents)) {
+curr = rooms[player.cr].contents[i]
+console.log(rooms[player.cr].contents[i].name,String(arg2))
+if (arg=="scan" && String(arg2).includes(String(rooms[player.cr].contents[i].name.toLowerCase()))) {
+output(curr.desc)
+valid=true
+}
+}
+if (arg=="scan" && arg2.includes("room")) {
+output("you tap in to something loosely connected to the host's eyes")
+output("You are in " + rooms[player.cr].desc)
+output("In the room, you see ")
+for (i in rooms[player.cr].contents) {
+output(String(rooms[player.cr].contents[i].name))
+}
+
+valid=true
+
+}
+if (arg=="scan" && arg2.includes("north")) {
+output("you tap in to something connected to the host's eyes")
+output("You look north, theres " + rooms[getRoom("north",player)].desc)
+//output("In the room, you see " + String(entities))
+
+valid=true
+
+}
+if(arg=="clear") {
+clear()
+valid=true
+}
+if(arg=="host"&& arg2.includes("rel")) {
+output("You relinquish your control to the host")
+valid=true
+tv = true
+}
+if(arg=="host"&& arg2.includes("room")) {
+output("You ask the host what it knows or thinks about the room your in")
+valid=true
+tv = true
+}
+if(arg=="move" && arg2.includes("north")) {
+output("You move north..")
+if (rooms[player.cr].north == null) {
+output("You bump headfirst into a wall, the host mocks you")
+} else {
+output("you finish moving north.")
+player.cr = rooms[player.cr].north
+//player.cr = player.cr = getRoom("north",player)
+}
+valid=true
+tv = true
+}
+if(arg=="move" && arg2.includes("south")) {
+output("You move south..")
+if (rooms[player.cr].south == null) {
+output("You bump headfirst into a wall, the host mocks you")
+} else {
+output("you finish moving south.")
+player.cr = rooms[player.cr].south
+}
+valid=true
+tv = true
+}
+if(arg=="host"&& arg2.includes("sei")) {
+output("You retake your control over the host")
+valid=true
+tv = true
+}
+if(arg=="host"&& arg2.includes("rep") || arg2.includes("opin")) {
+output("you ask your host what they think of you")
+output('"' + opinmsg[player.opin]+'"')
+valid=true
+tv = true
+}
+if(arg=="host"&& arg2.includes("status")) {
+output("you ask your host how they feel")
+valid=true
+tv = true
+}
+if(arg=="host"&& arg2.includes("thoughts")) {
+output("you ask your host if they have anything to say about this room")
+output('"' + rooms[player.cr].hostThoughts + '"')
+valid=true
+tv = true
+}
+
+if(tv) {
+
+}
+
+
+
+
+
+
+
+ var deiframe = document.getElementById('iframe'); // Replace 'myIframe' with your iframe's ID
+
+
+
+
+console.log(valid)
+if (valid==false) {
+output("You're not sure how to do that..")
+}
+}
+
+let currentZoomLevel = 1.0; // Start at 100% zoom
+// player.r is used for rotation/pan X value
+
+function tick() { 
+
+
+
+iframe.contentWindow.postMessage({x:player.x,y:player.y,pressedKeys:pressedKeys,},"*")
+  requestAnimationFrame(tick); // Keep the correct animation frame loop
+
+ 
+
+
+}
+// Start the loop once
+requestAnimationFrame(tick);
+
+
+</script>

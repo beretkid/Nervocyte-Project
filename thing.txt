@@ -1,0 +1,44 @@
+function tick() { 
+  requestAnimationFrame(tick); // Keep the correct animation frame loop
+
+  // Clear Canvas (use canvas.width/height if defined correctly)
+  ctx.clearRect(0, 0, canvas.width, canvas.height); 
+
+  // Update Player Position and Zoom Level (slower, smoother changes)
+  if (pressedKeys["KeyW"]) {
+    player.y -= 1;
+    currentZoomLevel += 0.01; // Increase zoom level slowly
+  }
+  if (pressedKeys["KeyS"]) {
+    player.y += 1;
+    currentZoomLevel -= 0.01; // Decrease zoom level slowly
+  }
+  // Clamp zoom level to prevent the image from disappearing or getting too big/small
+  currentZoomLevel = Math.max(0.5, Math.min(3.0, currentZoomLevel)); 
+
+  // Update rotation
+  if (pressedKeys["KeyA"]) { player.x -= 1; }
+  if (pressedKeys["KeyD"]) { player.x += 1; }
+  if (pressedKeys["KeyQ"]) { player.r += 8; }
+  if (pressedKeys["KeyE"]) { player.r -= 8; }
+
+  // Draw the player (moved after clearing and updating position)
+  ctx.fillRect(player.x, player.y, 5, 5);
+
+  // Update Background Styling using CSS Variables and easier logic
+  
+  // Calculate size as a percentage/multiplier
+  const bgSizeValue = `${500}% ${150}%`; // 200% was your initial size in HTML
+
+  // Calculate position (e.g., using 'center' for vertical positioning)
+  // player.r is your horizontal pan value (needs further logic for 360 wrap around)
+  const bgPosX = `${player.r}px`; 
+  const bgPosY = `${(player.y*-0.1) + 1000}px`;
+
+  // Apply CSS Variables to the 'ptop' element
+  pb.style.setProperty('--bg-size', bgSizeValue);
+  pb.style.setProperty('--bg-x', bgPosX);
+  pb.style.setProperty('--bg-y', bgPosY);
+  const iframe = document.getElementById('myIframe'); // Replace 'myIframe' with your iframe's ID
+iframe.contentWindow.postMessage('Hello from parent!'
+}

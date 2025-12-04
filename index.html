@@ -1,0 +1,261 @@
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three/examples/jsm/"
+	
+    }
+	     
+  }
+  
+</script>
+
+
+
+
+
+
+<script type="module"id="renderer">
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+  import * as THREE from 'three';
+        // Import STLLoader using the "three/addons/" mapping
+        import { STLLoader } from 'three/addons/loaders/STLLoader.js'; 
+var i = 0
+var pct = 0
+  var camturn = 0
+  var camup = 1.5
+const canvas = document.getElementById('visuals');
+  const ctx = canvas.getContext("2d");
+var entities = [{x:1,y:5,z:3}]
+const hphs = document.getElementById("hphs")
+
+var pressedKeys = []
+window.addEventListener('message', (event) => {
+    // Check the origin for security
+	 pressedKeys=event.data.pressedKeys
+	 
+	 //console.log(event)
+})
+
+canvas.width = window.innerWidth * 1
+canvas.height = window.innerHeight * 1
+var w = canvas.width;
+var h = canvas.height;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setAnimationLoop( animate );
+renderer.domElement.id = "wawa"
+document.body.appendChild( renderer.domElement );
+var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+scene.add( light );
+
+
+const loader = new STLLoader();
+
+// 2. Use the loader's .load() method
+loader.load(
+    // The path/URL to your .stl file
+    'CitidelWall.stl', 
+
+    // The onLoad callback function (fires when the file is ready)
+    function (geometry) {
+        // 3. Define the appearance (material)
+        const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+
+        // 4. Create the 3D object (mesh) and add it to the scene
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+		  
+        console.log('Model loaded successfully!');
+    },
+
+    // Optional: onProgress callback (for loading bars)
+    undefined, 
+
+    // Optional: onError callback (for error handling)
+    function (error) {
+        console.error('An error occurred while loading the model:', error);
+    }
+);
+
+
+
+//const geometry = new THREE.BoxGeometry( 2, 1, 1 );
+//const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+
+
+cube.position.y = 5
+camera.position.z = 0;
+
+
+
+
+
+
+var wdown = false
+var adown = false
+var sdown = false
+var ddown = false
+
+
+
+
+
+function animate() {
+
+
+var curr
+var cpx = camera.position.x
+var cpy = camera.position.z
+
+ctx.clearRect(0,0,1000,1000)
+   for (i in entities) {
+	ctx.fillStyle = "White"
+	curr = entities[i]
+		ctx.fillRect(curr.x + cpx,curr.y + cpy * 100,10,10)
+	}
+   camera.rotation.x = 0
+	camera.rotation.y = camturn
+	camera.rotation.z = 0
+   camera.rotateX(camup)
+	
+	
+	
+	renderer.render( scene, camera );
+  if (pressedKeys["KeyS"]) {
+    //.translateOnAxis (camera.rotation,0.05)
+    const ref = new THREE.Object3D
+   
+    ref.rotation.x = 0
+    ref.rotateY(camturn)
+    ref.rotation.z = 0
+    ref.position.x = camera.position.x
+    ref.position.y = camera.position.y
+    ref.position.z = camera.position.z
+
+        var newpos = ref.translateY(-0.05)
+        
+        camera.position.x = newpos.position.x
+        camera.position.y = newpos.position.y
+        camera.position.z = newpos.position.z
+console.log(ref.position)
+    
+  }
+  if (pressedKeys["KeyW"]) {
+    //.translateOnAxis (camera.rotation,0.05)
+    const ref = new THREE.Object3D
+   
+    ref.rotation.x = 0
+    ref.rotateY(camturn)
+    ref.rotation.z = 0
+    ref.position.x = camera.position.x
+    ref.position.y = camera.position.y
+    ref.position.z = camera.position.z
+
+        var newpos = ref.translateY(0.05)
+        
+        camera.position.x = newpos.position.x
+        camera.position.y = newpos.position.y
+        camera.position.z = newpos.position.z
+console.log(ref.position)
+    
+  }
+    if (pressedKeys["KeyA"]) {
+        //.translateOnAxis (camera.rotation,0.05)
+    const ref = new THREE.Object3D
+   
+   ref.rotation.x = 0
+	
+    ref.rotateY(camturn)
+    ref.rotation.z = 0
+    ref.position.x = camera.position.x
+    ref.position.y = camera.position.y
+    ref.position.z = camera.position.z
+
+        var newpos = ref.translateX(-0.05)
+        
+        camera.position.x = newpos.position.x
+        camera.position.y = newpos.position.y
+        camera.position.z = newpos.position.z
+console.log(ref.position)
+  }
+  if (pressedKeys["KeyD"]) {
+        //.translateOnAxis (camera.rotation,0.05)
+    const ref = new THREE.Object3D
+   
+   ref.rotation.x = 0
+	
+    ref.rotateY(camturn)
+    ref.rotation.z = 0
+    ref.position.x = camera.position.x
+    ref.position.y = camera.position.y
+    ref.position.z = camera.position.z
+
+        var newpos = ref.translateX(0.05)
+        
+        camera.position.x = newpos.position.x
+        camera.position.y = newpos.position.y
+        camera.position.z = newpos.position.z
+console.log(ref.position)
+  }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var changex = 0
+var changey = 0
+var prevx = 0
+var prevy = 0 
+
+
+
+
+
+ctx.fillStyle = "red"
+ctx.fillRect(0,0,50,50)
+
+
+
+
+//no school this friday btw!
+//neat! (That was a year ago he is fucking lying)
+
+
+
+
+
+
+</script>
+
+<canvas id="visuals"width="100"height="100"style="z-index: 01;position:absolute;top:0%;left:0%;border:2px solid;border-color:#0f0f0f"></canvas>
+
+<style>
+#wawa {
+
+
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  font-size: 28px;
+  font-family: monospace;
+}
+</style>
