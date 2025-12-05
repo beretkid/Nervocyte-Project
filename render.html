@@ -58,7 +58,7 @@ const loader = new STLLoader();
 // 2. Use the loader's .load() method
 loader.load(
     // The path/URL to your .stl file
-    'CitidelWall.stl', 
+    '/Assets/CitidelWall.stl', 
 
     // The onLoad callback function (fires when the file is ready)
     function (geometry) {
@@ -68,6 +68,7 @@ loader.load(
         // 4. Create the 3D object (mesh) and add it to the scene
         const cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
+		
 		  
         console.log('Model loaded successfully!');
 		renderer.setAnimationLoop( animate );
@@ -86,11 +87,13 @@ camera.position.z = 0;
 );
 
 
-
-const geometry = new THREE.BoxGeometry( 2, 1, 0 );
+        
+    
+const geometry = new THREE.BoxGeometry( 100, 100, 1 );
 const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-
-
+	const floor = new THREE.Mesh(geometry, material);
+    scene.add(floor);
+cube.position.y = -2
 
 
 
