@@ -112,7 +112,7 @@ ctx.fillRect(amnt%w,countOccurrences(amnt,w),5,5)
 
 	     document.addEventListener('keydown', function(event) {
 		  pressedKeys[event.code] = true;
-		  console.log(event.keyCode);
+		  console.log(event.code);
         if (event.key === 'Enter') {
             handleCommand(input.value)
 				
